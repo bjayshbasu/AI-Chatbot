@@ -56,6 +56,7 @@ def chat_endpoint(request: ChatRequest):
     pdf_context = ctx["pdf"]
     web_context = ctx["web"]
     sources = ctx["sources"]
+    agents = ctx["agents"]
 
     system_prompt = f"""
 You are an autonomous multi-agent AI assistant.
@@ -105,9 +106,11 @@ Instructions:
     return StreamingResponse(
         generate(),
         media_type="text/plain",
-        headers={"X-Sources": json.dumps(sources)},
+        headers={
+            "X-Sources": json.dumps(sources),
+            "X-Agents": json.dumps(agents),
+        },
     )
-
 # ---------------- CHAT HISTORY ---------------- #
 
 @app.get("/chats")

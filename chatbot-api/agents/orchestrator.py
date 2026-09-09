@@ -54,4 +54,5 @@ def execute_plan(question: str):
         context["web"] = web
         context["sources"] = sources
 
+    context["agents"] = agents
     return context
