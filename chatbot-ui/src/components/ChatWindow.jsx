@@ -35,7 +35,10 @@ function ChatWindow({
 }),
     });
 
-    const reader = res.body.getReader();
+const sourcesHeader = res.headers.get("X-Sources");
+const sources = sourcesHeader ? JSON.parse(sourcesHeader) : [];
+
+const reader = res.body.getReader();
     const decoder = new TextDecoder();
 
     let assistantText = "";
@@ -57,10 +60,14 @@ function ChatWindow({
       ]);
     }
 
-    const finalMessages = [
-      ...updatedMessages,
-      { role: "assistant", text: assistantText },
-    ];
+   const finalMessages = [
+  ...updatedMessages,
+  {
+    role: "assistant",
+    text: assistantText,
+    sources,
+  },
+];
 
     setMessages(finalMessages);
     if (isVoice) {
@@ -175,7 +182,12 @@ function speak(text) {
     {/* Scrollable messages */}
     <div className="flex-1 overflow-y-auto p-8 space-y-6 min-h-0">
       {messages.map((msg, i) => (
-        <MessageBubble key={i} role={msg.role} text={msg.text} />
+       <MessageBubble
+  key={i}
+  role={msg.role}
+  text={msg.text}
+  sources={msg.sources}
+/>
       ))}
 
       {loading && (

@@ -25,6 +25,9 @@ class ChatRequest(BaseModel):
     model: str = "qwen2.5:3b"
 class RenameChat(BaseModel):
     title: str
+class ChatResponse(BaseModel):
+    answer: str
+    sources: list = []
 from ollama import chat
 import base64
 
@@ -35,6 +38,7 @@ app.add_middleware(
     allow_origins=["http://localhost:5173"],
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Sources"],   # ← ADD THIS LINE
 )
 
 class Message(BaseModel):
@@ -48,8 +52,9 @@ def chat_endpoint(request: ChatRequest):
     # Search uploaded PDFs
     pdf_context = search_docs(user_question)
 
-    # Search the web only for recent/current queries
+
     web_context = ""
+    results = []
     keywords = ["latest", "today", "current", "news", "recent", "2026"]
 
     if any(k in user_question.lower() for k in keywords):
@@ -94,7 +99,13 @@ Otherwise answer from your general knowledge.
         for chunk in stream:
             yield chunk["message"]["content"]
 
-    return StreamingResponse(generate(), media_type="text/plain")
+    return StreamingResponse(
+    generate(),
+    media_type="text/plain",
+    headers={
+        "X-Sources": json.dumps(results if web_context else [])
+    },
+)
 @app.get("/chats")
 def get_chats():
     db = SessionLocal()
