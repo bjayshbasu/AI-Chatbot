@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  background: #343541;
+  font-family: Inter, sans-serif;
+}
+.prose {
+  max-width: none;
+}
+
+.prose pre {
+  border-radius: 12px;
+}
+
+.prose code {
+  font-size: 0.9rem;
+}
