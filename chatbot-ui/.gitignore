@@ -1,24 +1,29 @@
+# =========================
+# Python
+# =========================
+chatbot-api/.venv/
+chatbot-api/__pycache__/
+chatbot-api/**/*.pyc
+chatbot-api/*.db
+
+# Chroma Vector Database
+chatbot-api/vector_db/
+
+# Environment variables
+chatbot-api/.env
+
+# =========================
+# React / Vite
+# =========================
+chatbot-ui/node_modules/
+chatbot-ui/dist/
+
 # Logs
-logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# macOS
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+
+# VS Code
+.vscode/
