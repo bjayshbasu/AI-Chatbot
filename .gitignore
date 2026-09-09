@@ -1,0 +1,13 @@
+# Python
+chatbot-api/.venv/
+chatbot-api/__pycache__/
+chatbot-api/chat.db
+chatbot-api/uploads/
+chatbot-api/vector_db/
+
+# React
+chatbot-ui/node_modules/
+chatbot-ui/dist/
+
+# macOS
+.DS_Store
