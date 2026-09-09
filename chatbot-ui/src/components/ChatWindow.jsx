@@ -90,50 +90,59 @@ function ChatWindow({
     });
   }
 
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
-        {messages.map((msg, i) => (
-          <MessageBubble
-            key={i}
-            role={msg.role}
-            text={msg.text}
-            sources={msg.sources}
-            agents={msg.agents}
-          />
-        ))}
+return (
+  <div className="flex flex-col h-full overflow-hidden">
+    {/* Scrollable messages */}
+    <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+      {messages.map((msg, i) => (
+        <MessageBubble
+          key={i}
+          role={msg.role}
+          text={msg.text}
+          sources={msg.sources}
+          agents={msg.agents}
+          streaming={
+            loading &&
+            i === messages.length - 1 &&
+            msg.role === "assistant"
+          }
+        />
+      ))}
 
-        {loading && (
-          <div className="text-gray-400 text-sm">Thinking...</div>
-        )}
+      {loading && (
+        <div className="text-gray-400 text-sm animate-pulse">
+          Thinking...
+        </div>
+      )}
+    </div>
+
+    {/* Fixed input area */}
+    <div className="shrink-0 border-t border-gray-700 bg-[#202123] p-4">
+      <div className="flex gap-2 mb-3">
+        <FileUpload />
+        <ImageUpload />
+        <VoiceInput onTranscript={setInput} />
       </div>
 
-      <div className="border-t border-gray-700 p-4 bg-[#202123]">
-        <div className="flex gap-2 mb-3">
-          <FileUpload />
-          <ImageUpload />
-          <VoiceInput onTranscript={setInput} />
-        </div>
+      <div className="flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          placeholder="Message AI..."
+          className="flex-1 bg-[#343541] text-white rounded-lg px-4 py-3 outline-none"
+        />
 
-        <div className="flex gap-2">
-          <input
-            className="flex-1 bg-[#343541] rounded-lg px-4 py-3 outline-none"
-            placeholder="Message AI..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          />
-
-          <button
-            onClick={sendMessage}
-            className="bg-emerald-600 hover:bg-emerald-700 px-5 rounded-lg"
-          >
-            Send
-          </button>
-        </div>
+        <button
+          onClick={sendMessage}
+          className="bg-emerald-600 hover:bg-emerald-700 px-5 rounded-lg"
+        >
+          Send
+        </button>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default ChatWindow;
