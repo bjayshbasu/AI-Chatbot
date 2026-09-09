@@ -14,6 +14,7 @@ from rag.query import search_docs
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from tools.web_search import search_web, format_results
 from memory import extract_memory, get_memories
+from router import choose_tool
 import json
 
 Base.metadata.create_all(bind=engine)
@@ -50,18 +51,30 @@ def chat_endpoint(request: ChatRequest):
 
     user_question = request.messages[-1]["text"]
     extract_memory(user_question)
+
     # Search uploaded PDFs
-    pdf_context = search_docs(user_question)
+    if "summarize" in user_question.lower():
+        pdf_context = search_docs("document")
+    else:
+        pdf_context = search_docs(user_question)
+
     memory_context = "\n".join(get_memories())
 
+    tool = choose_tool(user_question)
+    print(f"🛠 Tool Selected: {tool}")
 
     web_context = ""
     results = []
-    keywords = ["latest", "today", "current", "news", "recent", "2026"]
 
-    if any(k in user_question.lower() for k in keywords):
+    if tool == "WEB":
         results = search_web(user_question)
         web_context = format_results(results)
+
+    if tool == "MEMORY":
+        memory_context = "\n".join(get_memories())
+
+    if tool == "PDF":
+        pdf_context = search_docs(user_question)
 
     context = f"""
 Long-term Memory:
@@ -80,12 +93,13 @@ Web Results:
             "content": f"""
 You are a helpful AI assistant.
 
-Use the PDF context if relevant.
-Use the web results if available.
-Otherwise answer from your general knowledge.
+If PDF Context is provided, answer ONLY using that document.
+If Web Results are provided, use them for current information.
+Otherwise answer from general knowledge.
+Never ask the user to upload the PDF if PDF Context already exists.
 
 {context}
-""",
+"""
         }
     ]
 
@@ -105,12 +119,12 @@ Otherwise answer from your general knowledge.
             yield chunk["message"]["content"]
 
     return StreamingResponse(
-    generate(),
-    media_type="text/plain",
-    headers={
-        "X-Sources": json.dumps(results if web_context else [])
-    },
-)
+        generate(),
+        media_type="text/plain",
+        headers={
+            "X-Sources": json.dumps(results if web_context else [])
+        },
+    )
 @app.get("/chats")
 def get_chats():
     db = SessionLocal()
@@ -198,7 +212,26 @@ def rename_chat(chat_id: int, data: RenameChat):
 
     return {"success": True}
 
+import tempfile
+import os
 
+@app.post("/upload")
+async def upload_pdf(file: UploadFile = File(...)):
+    # Save uploaded PDF temporarily
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp:
+        temp.write(await file.read())
+        temp_path = temp.name
+
+    # Ingest into ChromaDB
+    ingest_pdf(temp_path)
+
+    # Clean up temp file
+    os.remove(temp_path)
+
+    return {
+    "message": "PDF uploaded successfully",
+    "chunks": "Indexed"
+}
 @app.post("/vision")
 async def vision_chat(
     file: UploadFile = File(...),
