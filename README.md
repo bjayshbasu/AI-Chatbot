@@ -1,87 +1,114 @@
-# 🤖 AI Chatbot V2.3 — Autonomous Multimodal AI Agent
+# 🤖 AI Workspace V3.3 — Autonomous Multi-Agent AI Assistant
 
-A full-stack ChatGPT-style AI assistant built with **React, FastAPI, Ollama, ChromaDB, SQLite, and LLaVA**.
-
-The project features autonomous tool routing, long-term memory, PDF RAG, deep research, voice interaction, image understanding, and AI-powered PDF report export.
+A full-stack **multi-agent AI workspace** built with **React, FastAPI, Ollama, Qwen, LLaVA, ChromaDB, and RAG**. It supports long-term memory, PDF retrieval, deep research, vision, voice input, and collaborative AI agents with a live execution timeline.
 
 ---
 
-## ✨ Features
+## ✨ V3.3 Features
 
-### 🧠 AI Capabilities
-
-* Autonomous Tool Router (Memory, PDF, Web, Research & General)
-* Deep Research Agent with multi-source web search
-* Long-Term Memory using SQLite
-* PDF RAG (Retrieval-Augmented Generation)
-* Live Web Search with citations
-* Image Understanding with LLaVA
-* Voice Input (Speech-to-Text)
-* Voice Responses (Text-to-Speech)
-* Multi-model support via Ollama
-
-### 💻 Application Features
-
-* Streaming AI responses
-* Persistent chat history
-* Rename & delete conversations
-* Clickable source citations
-* Export research reports as PDF
-* Modern ChatGPT-inspired interface
+* 🧠 Autonomous Multi-Agent Orchestrator
+* 📊 Live Agent Timeline UI
+* 📄 PDF RAG with ChromaDB
+* 🌐 Deep Research with Web Search & Citations
+* 💾 Long-Term Memory
+* 🖼️ Vision AI (LLaVA)
+* 🎙️ Voice-to-Text Input
+* 📑 Export AI Responses as PDF
+* 📎 Drag & Drop PDF Upload
+* 📜 Auto-Scrolling Chat Experience
+* 📋 Copy Code Blocks
+* 💬 Chat History (Rename & Delete)
 
 ---
 
-## 🚀 What's New in V2.3?
+## 📸 Screenshots
 
-### 🔬 Deep Research Agent
+> Place these images in **`chatbot-ui/public/screenshots/`**
 
-Generate structured research reports from multiple web searches.
+### Memory Timeline
 
-Example prompt:
+![Memory Timeline](./screenshots/memory.png)
 
-> Research the impact of AI on education
+### Multi-Agent Timeline
 
-The agent automatically:
+![Agent Timeline](./screenshots/.png)
 
-1. Searches multiple web sources
-2. Aggregates information
-3. Generates a structured report
-4. Displays clickable citations
-5. Exports the report as PDF
+### PDF Upload & RAG
 
-### 📄 PDF Export
+![PDF Upload](./screenshots/researchbutton.png)
 
-Research reports can be downloaded as professionally formatted PDF documents with one click.
+### Vision AI
 
----
+![Vision AI](./screenshots/vision.png)
 
-## 🧭 Autonomous Tool Router
+### Deep Research
 
-The AI intelligently selects the correct tool based on user intent.
-
-| User Request                 | Selected Tool    |
-| ---------------------------- | ---------------- |
-| What's my favorite language? | 🧠 Memory        |
-| Summarize my uploaded PDF    | 📄 PDF RAG       |
-| Latest Apple news            | 🌐 Web Search    |
-| Research AI in education     | 🔬 Deep Research |
-| Explain recursion            | 🤖 General AI    |
+![Research](./screenshots/research.png)
 
 ---
 
-## 🏗️ Tech Stack
+## 🏗️ Architecture
+
+```text
+React UI
+    │
+    ▼
+ FastAPI Backend
+    │
+    ▼
+ Multi-Agent Orchestrator
+ ├── Memory Agent
+ ├── PDF Agent
+ ├── Research Agent
+ └── Vision Agent
+    │
+    ▼
+ Ollama (Qwen / LLaVA)
+    │
+    ▼
+ ChromaDB + SQLite
+```
+
+---
+
+## 🧠 Multi-Agent Workflow
+
+```text
+User Prompt
+     │
+     ▼
+Orchestrator
+     │
+ ┌───┼───────────────┐
+ │   │               │
+ ▼   ▼               ▼
+Memory PDF        Research
+ │    │              │
+ └────┴──────┬───────┘
+             ▼
+      Merged Context
+             ▼
+      Qwen Generates Answer
+             ▼
+   Agent Timeline + Sources
+```
+
+---
+
+## 🛠 Tech Stack
 
 | Layer           | Technology                  |
 | --------------- | --------------------------- |
 | Frontend        | React + Vite + Tailwind CSS |
 | Backend         | FastAPI                     |
-| AI Runtime      | Ollama                      |
-| LLM             | Qwen 2.5                    |
-| Vision          | LLaVA 7B                    |
+| Local LLM       | Ollama                      |
+| Chat Model      | Qwen 2.5                    |
+| Vision Model    | LLaVA 7B                    |
 | Vector Database | ChromaDB                    |
-| Database        | SQLite                      |
+| Embeddings      | all-MiniLM-L6-v2            |
+| Memory          | SQLite                      |
+| PDF             | LangChain + PyPDF           |
 | Research        | DuckDuckGo Search           |
-| PDF Export      | ReportLab                   |
 
 ---
 
@@ -91,42 +118,43 @@ The AI intelligently selects the correct tool based on user intent.
 AI-Chatbot/
 │
 ├── chatbot-api/
-│   ├── main.py
-│   ├── router.py
-│   ├── research.py
-│   ├── pdf_export.py
-│   ├── memory.py
-│   ├── database.py
+│   ├── agents/
 │   ├── rag/
-│   └── tools/
+│   ├── memory.py
+│   ├── pdf_export.py
+│   ├── database.py
+│   └── main.py
 │
-├── chatbot-ui/
-│   ├── src/
-│   ├── components/
-│   └── App.jsx
-│
-├── screenshots/
-│   ├── chat.png
-│   ├── memory.png
-│   ├── web-search.png
-│   ├── pdf.png
-│   ├── vision.png
-│   ├── research.png
-│   └── research-export.png
-│
-└── README.md
+└── chatbot-ui/
+    ├── src/
+    │   ├── components/
+    │   └── App.jsx
+    └── public/
+        └── screenshots/
+            ├── home.png
+            ├── agent-timeline.png
+            ├── pdf-upload.png
+            ├── vision-ai.png
+            └── research.png
 ```
 
 ---
 
-## ⚡ Installation
+## 🚀 Installation
 
-### Backend
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/AI-Chatbot.git
+cd AI-Chatbot
+```
+
+### 2. Backend
 
 ```bash
 cd chatbot-api
 
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
 
 pip install -r requirements.txt
@@ -134,13 +162,13 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-Backend runs at:
+Backend runs on:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-### Frontend
+### 3. Frontend
 
 ```bash
 cd chatbot-ui
@@ -149,7 +177,7 @@ npm install
 npm run dev
 ```
 
-Frontend runs at:
+Frontend runs on:
 
 ```text
 http://localhost:5173
@@ -157,103 +185,63 @@ http://localhost:5173
 
 ---
 
-## 📸 Screenshots
+## 💡 Example Prompts
 
-> Place all images inside the repository's `screenshots/` folder.
+### PDF RAG
 
-### 💬 Chat Interface
+> Summarize the uploaded PDF
 
-![Chat Interface](./screenshots/chat.png)
+### Deep Research
 
----
+> Research the impact of AI on education
 
-### 🧠 Long-Term Memory
+### Vision
 
-The assistant remembers user preferences and ongoing projects across conversations.
+> Describe this image
 
-![Long-Term Memory](./screenshots/memory.png)
+### Multi-Agent
 
----
+> Compare my uploaded PDF with today's AI news
 
-### 🌐 Web Search with Citations
+### Memory
 
-Ask about current events and receive live answers with clickable source links.
-
-![Web Search](./screenshots/web-search.png)
+> What's my favorite programming language?
 
 ---
 
-### 📄 PDF RAG
+## 📈 Version History
 
-Upload a PDF and ask questions about its contents using Retrieval-Augmented Generation.
-
-![PDF RAG](./screenshots/pdf.png)
-
----
-
-### 🖼️ Vision (LLaVA)
-
-Analyze uploaded images using the LLaVA multimodal model.
-
-![Vision](./screenshots/vision.png)
-
----
-
-### 🔬 Deep Research Agent
-
-Generate structured research reports from multiple web sources.
-
-![Deep Research](./screenshots/research.png)
+| Version  | Features                                                         |
+| -------- | ---------------------------------------------------------------- |
+| V1.0     | React + FastAPI Chat                                             |
+| V2.0     | Chat History + Memory                                            |
+| V2.1     | PDF RAG + ChromaDB                                               |
+| V2.2     | Deep Research                                                    |
+| V2.3     | Vision + Voice + PDF Export                                      |
+| V3.1     | Multi-Agent Orchestrator                                         |
+| V3.2     | Agent Timeline UI                                                |
+| **V3.3** | Live Agent Execution, Drag & Drop Upload, Auto-Scroll, Copy Code |
 
 ---
 
-### 📑 Export Research as PDF
+## 🎯 Roadmap
 
-Download AI-generated research reports as professionally formatted PDF documents.
-
-![Research PDF Export](./screenshots/research-export.png)
-
----
-
-## 🧠 Version History
-
-| Version  | Features               |
-| -------- | ---------------------- |
-| V1.0     | Local AI Chatbot       |
-| V1.2     | Multi-model Support    |
-| V1.3     | PDF RAG + Vision       |
-| V1.4     | Voice Assistant        |
-| V1.5     | Web Search Agent       |
-| V1.6     | Clickable Citations    |
-| V2.0     | Long-Term Memory       |
-| V2.1     | Autonomous Tool Router |
-| V2.2     | Deep Research Agent    |
-| **V2.3** | Research PDF Export    |
-
----
-
-## 🎯 Highlights
-
-* Autonomous AI Tool Routing
-* Deep Research with multiple sources
-* Long-Term Memory
-* PDF Question Answering (RAG)
-* Vision AI with LLaVA
-* Voice Conversations
-* Streaming Responses
-* PDF Report Export
-* Fully Local AI using Ollama
-
----
-
-## 📄 License
-
-MIT License
+* [x] Multi-Agent AI
+* [x] Long-Term Memory
+* [x] PDF RAG
+* [x] Vision AI
+* [x] Voice Input
+* [x] Deep Research
+* [x] PDF Export
+* [x] Agent Timeline
+* [ ] Project Workspace (V4.0)
+* [ ] Shared Knowledge Base
+* [ ] Collaborative Projects
 
 ---
 
 ## 👨‍💻 Author
 
-**Basu**
+**Bijesh Basu**
 
-Built with using React, FastAPI, Ollama & ChromaDB.
+Built as a portfolio project demonstrating modern **Generative AI**, **RAG**, **Multi-Agent Systems**, and **Full-Stack AI Engineering** using React, FastAPI, Ollama, and ChromaDB.
