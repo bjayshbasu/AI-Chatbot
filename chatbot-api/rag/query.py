@@ -1,16 +1,24 @@
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
+DB_DIR = "vector_db"
+
 embedding = HuggingFaceEmbeddings(
-    model_name="all-MiniLM-L6-v2"
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-db = Chroma(
-    persist_directory="vector_db",
-    embedding_function=embedding,
-)
+def search_docs(question: str, k: int = 5):
+    # Re-open the database every query
+    db = Chroma(
+        persist_directory=DB_DIR,
+        embedding_function=embedding,
+    )
 
-def search_docs(question: str):
-    docs = db.similarity_search(question, k=4)
+    docs = db.similarity_search(question, k=k)
+
+    print(f"Retrieved {len(docs)} chunks")
+
+    if not docs:
+        return ""
 
     return "\n\n".join(doc.page_content for doc in docs)

@@ -2,9 +2,13 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
 embedding = HuggingFaceEmbeddings(
-    model_name="all-MiniLM-L6-v2"
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
+
+DB_DIR = "vector_db"
+
 
 def ingest_pdf(path: str):
     loader = PyPDFLoader(path)
@@ -17,10 +21,12 @@ def ingest_pdf(path: str):
 
     chunks = splitter.split_documents(docs)
 
-    Chroma.from_documents(
+    db = Chroma.from_documents(
         documents=chunks,
         embedding=embedding,
-        persist_directory="vector_db",
+        persist_directory=DB_DIR,
     )
+
+    db.persist()
 
     return len(chunks)
