@@ -13,6 +13,7 @@ from rag.ingest import ingest_pdf
 from rag.query import search_docs
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from tools.web_search import search_web, format_results
+from memory import extract_memory, get_memories
 import json
 
 Base.metadata.create_all(bind=engine)
@@ -48,9 +49,10 @@ class Message(BaseModel):
 def chat_endpoint(request: ChatRequest):
 
     user_question = request.messages[-1]["text"]
-
+    extract_memory(user_question)
     # Search uploaded PDFs
     pdf_context = search_docs(user_question)
+    memory_context = "\n".join(get_memories())
 
 
     web_context = ""
@@ -62,6 +64,9 @@ def chat_endpoint(request: ChatRequest):
         web_context = format_results(results)
 
     context = f"""
+Long-term Memory:
+{memory_context}
+
 PDF Context:
 {pdf_context}
 
@@ -123,6 +128,9 @@ def get_chats():
     db.close()
     return result
 
+@app.get("/memories")
+def get_memory_list():
+    return get_memories(20)
 
 @app.post("/save")
 def save_chat(chat_data: dict):

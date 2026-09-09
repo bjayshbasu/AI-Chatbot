@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Sidebar({
   chats,
@@ -9,9 +9,20 @@ function Sidebar({
   renameChat,
 }) {
   const [editingId, setEditingId] = useState(null);
-  const [editTitle, setEditTitle] = useState("");
+const [editTitle, setEditTitle] = useState("");
+const [memories, setMemories] = useState([]);
 
-  return (
+const loadMemories = () => {
+  fetch("http://127.0.0.1:8000/memories")
+    .then(res => res.json())
+    .then(setMemories);
+};
+
+useEffect(() => {
+  loadMemories();
+}, []);
+
+return (
     <div className="w-64 bg-[#202123] p-4 flex flex-col">
       <button
         onClick={createChat}
@@ -74,7 +85,26 @@ function Sidebar({
     )}
   </div>
 ))}
+           </div>
+
+      {/* 🧠 Memories */}
+      <div className="mt-6 border-t border-gray-700 pt-4">
+        <h3 className="text-sm font-semibold text-gray-400 mb-3">
+          🧠 Memories
+        </h3>
+
+        <div className="space-y-2">
+          {memories.map((memory, i) => (
+            <div
+              key={i}
+              className="text-xs bg-[#2A2B32] rounded-lg p-2 text-gray-300"
+            >
+              {memory}
+            </div>
+          ))}
+        </div>
       </div>
+
     </div>
   );
 }

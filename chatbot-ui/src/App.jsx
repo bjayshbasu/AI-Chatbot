@@ -7,38 +7,38 @@ function App() {
   const [activeChat, setActiveChat] = useState(null);
   const [selectedModel, setSelectedModel] = useState("qwen2.5:3b");
 
+useEffect(() => {
+  async function loadChats() {
+    const res = await fetch("http://127.0.0.1:8000/chats");
+    const data = await res.json();
 
-  useEffect(() => {
-    async function loadChats() {
-      const res = await fetch("http://127.0.0.1:8000/chats");
-      const data = await res.json();
+    if (data.length > 0) {
+      setChats(data);
+      setActiveChat(data[0].id);
+    } else {
+      const firstChat = {
+        id: Date.now(),
+        title: "New Chat",
+        messages: [
+          {
+            role: "assistant",
+            text: "Hi! I'm your local AI.",
+          },
+        ],
+      };
 
-      if (data.length > 0) {
-        setChats(data);
-        setActiveChat(data[0].id);
-      } else {
-        const firstChat = {
-          id: Date.now(),
-          title: "New Chat",
-          messages: [
-            {
-              role: "assistant",
-              text: "Hi! I'm your local AI.",
-            },
-          ],
-        };
-
-        setChats([firstChat]);
-        setActiveChat(firstChat.id);
-      }
+      setChats([firstChat]);
+      setActiveChat(firstChat.id);
     }
+  }
 
-    loadChats();
-  }, []);
+  loadChats();
+}, []);
 
 const currentChat = chats.find(
   c => (c.id ?? c.tempId) === activeChat
 );
+
 function updateMessages(messages) {
   setChats(prev =>
     prev.map(chat =>
@@ -48,7 +48,6 @@ function updateMessages(messages) {
     )
   );
 }
-
  function createChat() {
   const newChat = {
     id: null,
