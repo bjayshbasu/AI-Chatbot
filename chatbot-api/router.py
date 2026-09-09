@@ -6,11 +6,13 @@ You are an AI tool router.
 
 Choose ONLY one tool.
 
-MEMORY = personal preferences, previous conversations, user profile
+MEMORY = personal preferences, previous conversations
 
-PDF = questions about uploaded documents, PDFs, files, reports, manuals, contracts, or requests to summarize a document
+PDF = uploaded documents, files, contracts, manuals
 
 WEB = latest news, today's events, current information
+
+RESEARCH = requests to research, analyze, compare, investigate, or create a detailed report
 
 GENERAL = everything else
 
@@ -18,6 +20,7 @@ Reply with ONLY one word:
 MEMORY
 PDF
 WEB
+RESEARCH
 GENERAL
 
 User question:

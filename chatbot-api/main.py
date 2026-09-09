@@ -15,6 +15,7 @@ from fastapi import FastAPI, HTTPException, UploadFile, File
 from tools.web_search import search_web, format_results
 from memory import extract_memory, get_memories
 from router import choose_tool
+from research import deep_research
 import json
 
 Base.metadata.create_all(bind=engine)
@@ -52,7 +53,7 @@ def chat_endpoint(request: ChatRequest):
     user_question = request.messages[-1]["text"]
     extract_memory(user_question)
 
-    # Search uploaded PDFs
+        # Search uploaded PDFs
     if "summarize" in user_question.lower():
         pdf_context = search_docs("document")
     else:
@@ -69,6 +70,20 @@ def chat_endpoint(request: ChatRequest):
     if tool == "WEB":
         results = search_web(user_question)
         web_context = format_results(results)
+
+    if tool == "RESEARCH":
+        report, research_sources = deep_research(user_question)
+
+        def generate():
+            yield report
+
+        return StreamingResponse(
+            generate(),
+            media_type="text/plain",
+            headers={
+                "X-Sources": json.dumps(research_sources)
+        },
+    )
 
     if tool == "MEMORY":
         memory_context = "\n".join(get_memories())
