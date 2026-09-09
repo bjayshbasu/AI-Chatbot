@@ -1,135 +1,91 @@
-# 🤖 AI Chatbot V2.2 — Autonomous Multimodal AI Agent
+# 🤖 AI Chatbot V2.3 — Autonomous Multimodal AI Agent
 
-A full-stack **ChatGPT-style AI assistant** built with **React, FastAPI, Ollama, ChromaDB, SQLite, and LLaVA**.
+A full-stack ChatGPT-style AI assistant built with **React, FastAPI, Ollama, ChromaDB, SQLite, and LLaVA**.
 
-V2.2 introduces an **Autonomous Tool Router** and **Deep Research Agent** that intelligently chooses between Memory, PDF RAG, Web Search, Vision, and Research without relying on hard-coded keywords.
-
----
-
-# ✨ Features
-
-* 🧭 Autonomous AI Tool Router
-* 🔬 Deep Research Agent (multi-search + AI report)
-* 🧠 Long-term Memory
-* 📄 PDF RAG (Retrieval-Augmented Generation)
-* 🌐 Live Web Search
-* 🔗 Clickable Source Citations
-* 🖼️ Image Understanding (LLaVA)
-* 🎤 Voice Input (Speech-to-Text)
-* 🔊 AI Voice Responses (Text-to-Speech)
-* 🤖 Multi-model Support
-* 💾 Persistent Chat History
-* ✏️ Rename & Delete Conversations
-* 🌙 Modern ChatGPT-inspired UI
+The project features autonomous tool routing, long-term memory, PDF RAG, deep research, voice interaction, image understanding, and AI-powered PDF report export.
 
 ---
 
-# 📸 Screenshots
+## ✨ Features
 
-## 💬 Chat Interface
+### 🧠 AI Capabilities
 
-![Chat](screenshots/chat.png)
+* Autonomous Tool Router (Memory, PDF, Web, Research & General)
+* Deep Research Agent with multi-source web search
+* Long-Term Memory using SQLite
+* PDF RAG (Retrieval-Augmented Generation)
+* Live Web Search with citations
+* Image Understanding with LLaVA
+* Voice Input (Speech-to-Text)
+* Voice Responses (Text-to-Speech)
+* Multi-model support via Ollama
 
----
+### 💻 Application Features
 
-## 🧠 Long-Term Memory
-
-The assistant remembers user preferences and ongoing projects across conversations.
-
-![Memory](screenshots/memory.png)
-
----
-
-## 🌐 Web Search with Citations
-
-Ask about current events and receive live answers with clickable sources.
-
-![Web Search](screenshots/web-search.png)
-
----
-
-## 📄 PDF RAG
-
-Upload any PDF and ask questions about its contents.
-
-![PDF](screenshots/pdf.png)
+* Streaming AI responses
+* Persistent chat history
+* Rename & delete conversations
+* Clickable source citations
+* Export research reports as PDF
+* Modern ChatGPT-inspired interface
 
 ---
 
-## 🖼️ Vision (LLaVA)
+## 🚀 What's New in V2.3?
 
-Upload an image and let the AI describe and analyze it.
+### 🔬 Deep Research Agent
 
-![Vision](screenshots/vision.png)
-
----
-
-## 🔬 Deep Research Agent
-
-Generate structured research reports powered by multiple web searches and AI analysis.
-
-![Research](screenshots/research.png)
-
----
-
-# 🚀 What's New in V2.2?
-
-### 🧭 Autonomous Tool Router
-
-The AI automatically decides which tool to use.
-
-| User Request                 | Tool Selected |
-| ---------------------------- | ------------- |
-| What's my favorite language? | 🧠 Memory     |
-| Summarize my uploaded PDF    | 📄 PDF        |
-| Latest Apple news            | 🌐 Web        |
-| Research AI in education     | 🔬 Research   |
-| Explain recursion            | 🤖 General    |
-
----
-
-### 🔬 Deep Research
-
-The Research Agent performs:
-
-1. Multiple web searches
-2. Source aggregation
-3. AI analysis
-4. Structured report generation
-5. Clickable citations
+Generate structured research reports from multiple web searches.
 
 Example prompt:
 
 > Research the impact of AI on education
 
+The agent automatically:
+
+1. Searches multiple web sources
+2. Aggregates information
+3. Generates a structured report
+4. Displays clickable citations
+5. Exports the report as PDF
+
+### 📄 PDF Export
+
+Research reports can be downloaded as professionally formatted PDF documents with one click.
+
 ---
 
-# 🏗️ Tech Stack
+## 🧭 Autonomous Tool Router
+
+The AI intelligently selects the correct tool based on user intent.
+
+| User Request                 | Selected Tool    |
+| ---------------------------- | ---------------- |
+| What's my favorite language? | 🧠 Memory        |
+| Summarize my uploaded PDF    | 📄 PDF RAG       |
+| Latest Apple news            | 🌐 Web Search    |
+| Research AI in education     | 🔬 Deep Research |
+| Explain recursion            | 🤖 General AI    |
+
+---
+
+## 🏗️ Tech Stack
 
 | Layer           | Technology                  |
 | --------------- | --------------------------- |
 | Frontend        | React + Vite + Tailwind CSS |
 | Backend         | FastAPI                     |
-| Database        | SQLite                      |
-| Vector Database | ChromaDB                    |
 | AI Runtime      | Ollama                      |
+| LLM             | Qwen 2.5                    |
 | Vision          | LLaVA 7B                    |
-| Embeddings      | Nomic Embed Text            |
-| Research        | DuckDuckGo + Qwen           |
+| Vector Database | ChromaDB                    |
+| Database        | SQLite                      |
+| Research        | DuckDuckGo Search           |
+| PDF Export      | ReportLab                   |
 
 ---
 
-# 🤖 Supported Models
-
-* Qwen 2.5 (Default)
-* Llama 3.2
-* Mistral 7B
-* DeepSeek R1
-* LLaVA 7B (Vision)
-
----
-
-# 📂 Project Structure
+## 📂 Project Structure
 
 ```text
 AI-Chatbot/
@@ -138,9 +94,9 @@ AI-Chatbot/
 │   ├── main.py
 │   ├── router.py
 │   ├── research.py
+│   ├── pdf_export.py
 │   ├── memory.py
 │   ├── database.py
-│   ├── models.py
 │   ├── rag/
 │   └── tools/
 │
@@ -155,16 +111,17 @@ AI-Chatbot/
 │   ├── web-search.png
 │   ├── pdf.png
 │   ├── vision.png
-│   └── research.png
+│   ├── research.png
+│   └── research-export.png
 │
 └── README.md
 ```
 
 ---
 
-# ⚡ Installation
+## ⚡ Installation
 
-## Backend
+### Backend
 
 ```bash
 cd chatbot-api
@@ -177,13 +134,13 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-Runs on:
+Backend runs at:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-## Frontend
+### Frontend
 
 ```bash
 cd chatbot-ui
@@ -192,7 +149,7 @@ npm install
 npm run dev
 ```
 
-Runs on:
+Frontend runs at:
 
 ```text
 http://localhost:5173
@@ -200,44 +157,69 @@ http://localhost:5173
 
 ---
 
-# 🧠 Version History
+## 📸 Screenshots
 
-| Version  | Features                   |
-| -------- | -------------------------- |
-| V1.1     | Local AI Chatbot           |
-| V1.2     | Multi-model + Regenerate   |
-| V1.3     | PDF RAG + Vision           |
-| V1.4     | Voice Assistant            |
-| V1.5     | Web Search Agent           |
-| V1.6     | Clickable Source Citations |
-| V2.0     | Long-term Memory Agent     |
-| V2.1     | Autonomous Tool Router     |
-| **V2.2** | Deep Research Agent        |
+Add your screenshots inside the `screenshots/` folder using these names:
+
+* `chat.png`
+* `memory.png`
+* `web-search.png`
+* `pdf.png`
+* `vision.png`
+* `research.png`
+* `research-export.png`
+
+Example:
+
+```md
+![Chat Interface](screenshots/chat.png)
+
+![Deep Research](screenshots/research.png)
+
+![PDF Export](screenshots/research-export.png)
+```
 
 ---
 
-# 🎯 Highlights
+## 🧠 Version History
+
+| Version  | Features               |
+| -------- | ---------------------- |
+| V1.0     | Local AI Chatbot       |
+| V1.2     | Multi-model Support    |
+| V1.3     | PDF RAG + Vision       |
+| V1.4     | Voice Assistant        |
+| V1.5     | Web Search Agent       |
+| V1.6     | Clickable Citations    |
+| V2.0     | Long-Term Memory       |
+| V2.1     | Autonomous Tool Router |
+| V2.2     | Deep Research Agent    |
+| **V2.3** | Research PDF Export    |
+
+---
+
+## 🎯 Highlights
 
 * Autonomous AI Tool Routing
-* Multi-source Deep Research
-* Long-term Memory
-* PDF Question Answering
-* Vision with LLaVA
-* Live Web Search
+* Deep Research with multiple sources
+* Long-Term Memory
+* PDF Question Answering (RAG)
+* Vision AI with LLaVA
 * Voice Conversations
 * Streaming Responses
+* PDF Report Export
 * Fully Local AI using Ollama
 
 ---
 
-# 📄 License
+## 📄 License
 
 MIT License
 
 ---
 
-# 👨‍💻 Author
+## 👨‍💻 Author
 
 **Basu**
 
-Built with ❤️ using React, FastAPI & Ollama.
+Built with using React, FastAPI, Ollama & ChromaDB.
