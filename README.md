@@ -159,25 +159,59 @@ http://localhost:5173
 
 ## 📸 Screenshots
 
-Add your screenshots inside the `screenshots/` folder using these names:
+> Place all images inside the repository's `screenshots/` folder.
 
-* `chat.png`
-* `memory.png`
-* `web-search.png`
-* `pdf.png`
-* `vision.png`
-* `research.png`
-* `research-export.png`
+### 💬 Chat Interface
 
-Example:
+![Chat Interface](./screenshots/chat.png)
 
-```md
-![Chat Interface](screenshots/chat.png)
+---
 
-![Deep Research](screenshots/research.png)
+### 🧠 Long-Term Memory
 
-![PDF Export](screenshots/research-export.png)
-```
+The assistant remembers user preferences and ongoing projects across conversations.
+
+![Long-Term Memory](./screenshots/memory.png)
+
+---
+
+### 🌐 Web Search with Citations
+
+Ask about current events and receive live answers with clickable source links.
+
+![Web Search](./screenshots/web-search.png)
+
+---
+
+### 📄 PDF RAG
+
+Upload a PDF and ask questions about its contents using Retrieval-Augmented Generation.
+
+![PDF RAG](./screenshots/pdf.png)
+
+---
+
+### 🖼️ Vision (LLaVA)
+
+Analyze uploaded images using the LLaVA multimodal model.
+
+![Vision](./screenshots/vision.png)
+
+---
+
+### 🔬 Deep Research Agent
+
+Generate structured research reports from multiple web sources.
+
+![Deep Research](./screenshots/research.png)
+
+---
+
+### 📑 Export Research as PDF
+
+Download AI-generated research reports as professionally formatted PDF documents.
+
+![Research PDF Export](./screenshots/research-export.png)
 
 ---
 
