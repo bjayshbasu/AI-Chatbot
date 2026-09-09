@@ -7,7 +7,7 @@ from models import Base
 from fastapi import HTTPException
 from database import SessionLocal
 from models import Chat
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 from fastapi import UploadFile, File
 from rag.ingest import ingest_pdf
 from rag.query import search_docs
@@ -16,6 +16,7 @@ from tools.web_search import search_web, format_results
 from memory import extract_memory, get_memories
 from router import choose_tool
 from research import deep_research
+from pdf_export import create_pdf
 import json
 
 Base.metadata.create_all(bind=engine)
@@ -31,6 +32,9 @@ class RenameChat(BaseModel):
 class ChatResponse(BaseModel):
     answer: str
     sources: list = []
+class ExportRequest(BaseModel):
+    title: str
+    content: str
 from ollama import chat
 import base64
 
@@ -247,6 +251,22 @@ async def upload_pdf(file: UploadFile = File(...)):
     "message": "PDF uploaded successfully",
     "chunks": "Indexed"
 }
+@app.post("/export-report")
+def export_report(data: ExportRequest):
+
+    filename = "research_report.pdf"
+
+    create_pdf(
+        data.title,
+        data.content,
+        filename
+    )
+
+    return FileResponse(
+        filename,
+        media_type="application/pdf",
+        filename=filename
+    )
 @app.post("/vision")
 async def vision_chat(
     file: UploadFile = File(...),

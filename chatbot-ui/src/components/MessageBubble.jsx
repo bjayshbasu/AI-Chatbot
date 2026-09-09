@@ -4,6 +4,28 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function MessageBubble({ role, text, sources = [] }) {
+  const exportPDF = async () => {
+  const res = await fetch("http://127.0.0.1:8000/export-report", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title: "AI Research Report",
+      content: text,
+    }),
+  });
+
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "research_report.pdf";
+  a.click();
+
+  window.URL.revokeObjectURL(url);
+};
   const isUser = role === "user";
 
   return (
@@ -68,6 +90,14 @@ function MessageBubble({ role, text, sources = [] }) {
       ))}
     </div>
   )}
+  {role === "assistant" && text.length > 300 && (
+  <button
+    onClick={exportPDF}
+    className="mt-3 text-sm bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg"
+  >
+    📄 Export PDF
+  </button>
+)}
 </>
 )}
       </div>
