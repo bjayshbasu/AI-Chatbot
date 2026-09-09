@@ -26,14 +26,14 @@ function MessageBubble({
     });
 
     const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
     a.download = "research_report.pdf";
     a.click();
 
-    window.URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -49,30 +49,37 @@ function MessageBubble({
           <p className="whitespace-pre-wrap">{text}</p>
         ) : (
           <>
-            {/* Markdown Rendering */}
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
-                code({ inline, className, children, ...props }) {
+                code({ inline, className, children }) {
                   const match = /language-(\w+)/.exec(className || "");
+                  const code = String(children).replace(/\n$/, "");
 
                   if (!inline && match) {
                     return (
-                      <SyntaxHighlighter
-                        style={oneDark}
-                        language={match[1]}
-                        PreTag="div"
-                      >
-                        {String(children).replace(/\n$/, "")}
-                      </SyntaxHighlighter>
+                      <div className="relative">
+                        <button
+                          onClick={() =>
+                            navigator.clipboard.writeText(code)
+                          }
+                          className="absolute right-2 top-2 text-xs bg-gray-700 px-2 py-1 rounded hover:bg-gray-600"
+                        >
+                          Copy
+                        </button>
+
+                        <SyntaxHighlighter
+                          language={match[1]}
+                          style={oneDark}
+                        >
+                          {code}
+                        </SyntaxHighlighter>
+                      </div>
                     );
                   }
 
                   return (
-                    <code
-                      className="bg-gray-700 px-1 py-0.5 rounded text-sm"
-                      {...props}
-                    >
+                    <code className="bg-gray-700 px-1 rounded">
                       {children}
                     </code>
                   );
@@ -82,7 +89,6 @@ function MessageBubble({
               {text}
             </ReactMarkdown>
 
-            {/* 🧠 Live Agent Timeline */}
             {agents.length > 0 && (
               <AgentTimeline
                 agents={agents}
@@ -90,7 +96,6 @@ function MessageBubble({
               />
             )}
 
-            {/* 🌐 Sources */}
             {sources.length > 0 && (
               <div className="mt-4 border-t border-gray-600 pt-3">
                 <p className="text-xs text-gray-400 mb-2">
@@ -103,7 +108,7 @@ function MessageBubble({
                     href={src.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="block text-sm text-blue-400 hover:underline truncate"
+                    className="block text-blue-400 hover:underline text-sm"
                   >
                     {src.title}
                   </a>
@@ -111,11 +116,10 @@ function MessageBubble({
               </div>
             )}
 
-            {/* 📄 Export PDF */}
             {text.length > 300 && (
               <button
                 onClick={exportPDF}
-                className="mt-3 text-sm bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg transition"
+                className="mt-3 text-sm bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg"
               >
                 📄 Export PDF
               </button>

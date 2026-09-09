@@ -6,10 +6,34 @@ from agents.research_agent import run as research_run
 
 
 def plan_task(question: str):
-    prompt = f"""
+    q = question.lower()
+
+    # Rule-based routing (reliable)
+    agents = []
+
+    if any(word in q for word in [
+        "pdf", "document", "booklet", "uploaded",
+        "summarize", "summary"
+    ]):
+        agents.append("PDF")
+
+    if any(word in q for word in [
+        "news", "research", "latest", "today",
+        "current", "web"
+    ]):
+        agents.append("RESEARCH")
+
+    if any(word in q for word in [
+        "remember", "favorite", "my ", "memory"
+    ]):
+        agents.append("MEMORY")
+
+    # Fallback to LLM only if nothing matched
+    if not agents:
+        prompt = f"""
 You are an AI orchestrator.
 
-Agents:
+Available agents:
 MEMORY
 PDF
 RESEARCH
@@ -17,30 +41,30 @@ VISION
 
 Return only comma-separated agent names.
 
-Question:
-{question}
+Question: {question}
 """
+        response = chat(
+            model="qwen2.5:3b",
+            messages=[{"role": "user", "content": prompt}],
+        )
 
-    response = chat(
-        model="qwen2.5:3b",
-        messages=[{"role":"user","content":prompt}]
-    )
+        agents = [
+            a.strip().upper()
+            for a in response["message"]["content"].split(",")
+        ]
 
-    return [
-        a.strip().upper()
-        for a in response["message"]["content"].split(",")
-    ]
+    return agents
 
 
 def execute_plan(question: str):
-
     agents = plan_task(question)
 
     context = {
-        "memory":"",
-        "pdf":"",
-        "web":"",
-        "sources":[]
+        "memory": "",
+        "pdf": "",
+        "web": "",
+        "sources": [],
+        "agents": agents,
     }
 
     if "MEMORY" in agents:
@@ -54,5 +78,4 @@ def execute_plan(question: str):
         context["web"] = web
         context["sources"] = sources
 
-    context["agents"] = agents
     return context
