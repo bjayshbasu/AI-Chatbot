@@ -7,11 +7,11 @@ function InputBox({ onSend, onUpload, loading }) {
   const [listening, setListening] = useState(false);
 const recognitionRef = useRef(null);
   function handleSend() {
-    if (!input.trim() || loading) return;
+  if (!input.trim() || loading) return;
 
-    onSend(input);
-    setInput("");
-  }
+  onSend(input, false);
+  setInput("");
+}
   async function uploadImage(file) {
   const formData = new FormData();
   formData.append("file", file);
@@ -50,7 +50,7 @@ function startListening() {
   setInput(transcript);
 
   // Send automatically
-  onSend(transcript);
+  onSend(transcript, true);
   setInput("");
 };
 

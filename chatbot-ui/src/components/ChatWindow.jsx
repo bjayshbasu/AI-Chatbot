@@ -12,8 +12,9 @@ function ChatWindow({
 }) {
   const [loading, setLoading] = useState(false);
 
-  async function sendMessage(text) {
-    if (!text.trim()) return;
+  async function sendMessage(text, isVoice = false) {
+  if (!text.trim()) return;
+
 
     const updatedMessages = [
       ...messages,
@@ -62,7 +63,9 @@ function ChatWindow({
     ];
 
     setMessages(finalMessages);
-    speak(assistantText);
+    if (isVoice) {
+  speak(assistantText);
+}
 
     const saveRes = await fetch("http://127.0.0.1:8000/save", {
       method: "POST",
@@ -80,14 +83,14 @@ function ChatWindow({
 
     const saved = await saveRes.json();
 
-    setChats(prev =>
-      prev.map(chat =>
-        (chat.id ?? chat.tempId) === activeChat
-          ? { ...chat, id: saved.id }
-          : chat
-      )
-    );
-    speak(assistantText);
+   setChats(prev =>
+  prev.map(chat =>
+    (chat.id ?? chat.tempId) === activeChat
+      ? { ...chat, id: saved.id }
+      : chat
+  )
+);
+
 setLoading(false);
   }
 async function regenerateResponse() {
